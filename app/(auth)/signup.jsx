@@ -3,6 +3,7 @@ import { useRouter } from "expo-router";
 import { useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   KeyboardAvoidingView,
   Platform,
   Text,
@@ -13,16 +14,22 @@ import {
 
 import styles from "../../assets/styles/signup.styles";
 import COLORS from "../../constants/colors";
+import { useAuthStore } from "../../store/authStore";
 
 export default function Signup() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
-  const handleSingUp = () => {};
+  const { user, isLoading, register } = useAuthStore();
+
+  const handleSingUp = async () => {
+    const result = await register(username, email, password);
+
+    if (!result.success) Alert.alert("Error", result.error);
+  };
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
