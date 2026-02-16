@@ -3,6 +3,7 @@ import { Link } from "expo-router";
 import { useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   Image,
   KeyboardAvoidingView,
   Platform,
@@ -13,14 +14,18 @@ import {
 } from "react-native";
 import style from "../../assets/styles/login.styles";
 import COLORS from "../../constants/colors";
+import { useAuthStore } from "../../store/authStore";
 
 export default function Login() {
+  const { isLoading, login } = useAuthStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = () => {};
+  const handleLogin = async () => {
+    const result = await login(email, password);
+    if (!result.success) Alert.alert("Error", result.error);
+  };
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
